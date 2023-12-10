@@ -21,18 +21,25 @@ modalBtn.forEach(btn => {
   })
 });
 
+//Close modal event
 closeBtn.addEventListener("click", () => closeModal());
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    closeModal();
+  }
+})
+
 
 // launch modal form
 function launchModal() {
   modalbg.style.display = "block";
   disablePageScroll();
-  closeBtn.addEventListener("click", closeModal);
 }
 
 //Close modal form
 function closeModal() {  
   modalbg.style.display = "none";
+  closeBtn.blur();
   enablePageScroll();
 
   closeBtn.removeEventListener("click", closeModal);
