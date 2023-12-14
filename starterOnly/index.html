@@ -63,8 +63,10 @@
               method="get"
             >
               <div
-                class="formData">
-                <label>First Name</label><br>
+                class="formData"
+                data-error
+                data-error-visible="false">
+                <label for="first">First Name</label><br>
                 <input
                   class="text-control"
                   type="text"
@@ -75,8 +77,10 @@
                 /><br>
               </div>
               <div
-                class="formData">
-                <label>Last Name</label><br>
+                class="formData"
+                data-error
+                data-error-visible="false">
+                <label for="last">Last Name</label><br>
                 <input
                   class="text-control"
                   type="text"
@@ -87,8 +91,10 @@
                 /><br>
               </div>
               <div
-                class="formData">
-                <label>Email</label><br>
+                class="formData"
+                data-error
+                data-error-visible="false">
+                <label for="email">Email</label><br>
                 <input
                   class="text-control"
                   type="email"
@@ -99,8 +105,10 @@
                 /><br>
               </div>
               <div
-                class="formData">
-                <label>Birthdate</label><br>
+                class="formData"
+                data-error
+                data-error-visible="false">
+                <label for="birthdate">Birthdate</label><br>
                 <input
                   class="text-control"
                   type="date"
@@ -110,8 +118,10 @@
                 /><br>
               </div>
               <div
-                class="formData">
-                <label>How many tournaments have you attended? </label><br>
+                class="formData"
+                data-error
+                data-error-visible="false">
+                <label for="quantity">How many tournaments have you attended? </label><br>
                 <input 
                   type="number" 
                   class="text-control" 
@@ -124,7 +134,9 @@
               </div>
               <p class="text-label">Where do you want to participate this year?</p>
               <div
-                class="formData">
+                class="formData"
+                data-error
+                data-error-visible="false">
                 <input
                   class="checkbox-input"
                   type="radio"
@@ -195,7 +207,9 @@
               </div>
 
               <div
-                class="formData">
+                class="formData"
+                data-error
+                data-error-visible="false">
                 <input
                   class="checkbox-input"
                   type="checkbox"
@@ -235,7 +249,8 @@
         <div class="content">
           <span class="close"></span>
           <div class="modal-body">
-
+              <p class="confirm-text">Thank you for submitting your registration details</p>
+              <button class="btn-close">Close</button>
           </div>
         </div>
       </div>

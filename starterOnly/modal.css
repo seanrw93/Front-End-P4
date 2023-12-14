@@ -187,6 +187,33 @@ main {
   background-color: rgba(26, 39, 156, 0.4);
 }
 
+.modal-confirm > .content > .modal-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  height: 90vh;
+}
+
+.confirm-text {
+  justify-self: center;
+  text-align: center;
+  margin-top: auto;
+  font-size: 1.5em;
+}
+
+.btn-close {
+  background: #fe142f;
+  display: block;
+  margin-top: auto;
+  border-radius: 7px;
+  font-size: 1rem;
+  padding: 12px 82px;
+  color: #fff;
+  cursor: pointer;
+  border: 0;
+}
+
 .content {
   margin: 5% auto;
   width: 100%;

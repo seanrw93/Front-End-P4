@@ -12,7 +12,8 @@ const modalbg = document.querySelector(".modal-form");
 const modalConf = document.querySelector(".modal-confirm")
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-const closeBtn = document.querySelector(".close")
+const closeBtn = document.querySelectorAll(".close")
+const closeModalbtn = document.querySelector(".btn-close")
 const form = document.forms.reserve;
 
 // launch modal event
@@ -22,19 +23,22 @@ modalBtn.forEach(btn => {
   })
 });
 
-//Close modal event
-closeBtn.addEventListener("click", e => {
-  if (e.target.classList.contains("close")) {
-    closeModal(modalbg);
-    closeModal(modalBtn);
-  }
-});
+//Close modal event via X button
+closeBtn.forEach(btn => {
+  btn.addEventListener("click", () => {
+      closeModal(modalbg);
+      closeModal(modalConf);
+  })
+})
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") {
     closeModal(modalbg);
     closeModal(modalConf);
   }
 })
+
+//Close modal event via close button
+closeModalbtn.addEventListener("click", () => closeModal(modalConf));
 
 
 // launch modal form
@@ -46,10 +50,8 @@ function launchModal(modal) {
 //Close modal form
 function closeModal(modal) {  
   modal.style.display = "none";
-  closeBtn.blur();
   enablePageScroll();
-
-  closeBtn.removeEventListener("click", closeModal);
+  form.reset();
 }
 
 // Disable page scroll
@@ -100,20 +102,12 @@ function processFormSubmission(e) {
 
   let userData = new UserData();
 
-  // formData.forEach(formElement => {
-  //   const input = formElement.querySelector(".input");
-
-  //   switch (input.name) {
-  //     case "first": 
-  //       input.addEventListener("input", e => handleValueMissing(e, "Please enter your first name"));
-  //       break;
-  //   }
-  // })
 
   // Convert the UserData instance to JSON
   // let jsonUserData = userData.toJson();
   // console.log(jsonUserData);
   closeModal(modalbg);
+  form.reset();
 
   setTimeout(() => {
     launchModal(modalConf)
