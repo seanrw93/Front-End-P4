@@ -7,6 +7,7 @@ function toggleResponsiveNav() {
   }
 }
 
+
 // DOM Elements
 const modalbg = document.querySelector(".modal-form");
 const modalConf = document.querySelector(".modal-confirm")
@@ -64,48 +65,94 @@ function enablePageScroll() {
   document.body.style.overflow = "";
 }
 
+// Get today's date and insert it as max date in date input in HTML
+function getTodaysdate() {
+  const date = new Date()
+  const currentYear = date.getFullYear();
+  const currentMonth = date.getMonth() + 1;
+  const currentDate = date.getDate();
+
+  return `${currentYear}-${currentMonth}-${currentDate}`
+}
+
+formData.forEach(data => {
+  const input = data.querySelector("input")
+  if (input.name === "birthdate") {
+    input.setAttribute("max", `${getTodaysdate()}`)
+  }
+})
+
 //Class to hold form data 
 class UserData {
-  constructor(firstName, lastName, email, birthDate, tournamentsNum, location, checkbox) {
-    this.firstName = firstName;
-    this.lastName = lastName;
+  constructor(first, last, email, birthdate, quantity, location, conditions) {
+    this.first = first;
+    this.last = last;
     this.email = email;
-    this.birthDate = birthDate;
-    this.tournamentsNum = tournamentsNum;
+    this.birthdate = birthdate;
+    this.quantity = quantity;
     this.location = location;
-    this.checkbox = checkbox || [];
+    this.conditions = conditions || [];
   }
 
   toJson() {
     return {
-      firstName: this.firstName,
-      lastName: this.lastName,
+      first: this.first,
+      last: this.last,
       email: this.email,
-      birthDate: this.birthDate,
-      tournamentsNum: this.tournamentsNum,
+      birthdate: this.birthdate,
+      quantity: this.quantity,
       location: this.location,
-      checkbox: this.checkbox
+      conditions: this.conditions
     }
   }
 }
 
-function handleValueMissing(e, errorMessage) {
-  if (e.target.validity.valueMissing) {
-    e.target.setCustomValidity(errorMessage);
+
+//Collect form data and store in a new userData object
+function getUserData() {
+  let userData = new UserData();
+
+  formData.forEach(data => {
+    const input = data.querySelector("input");
+    userData[input.name] = input.value;
+  })
+
+  // Convert the UserData instance to JSON
+  let jsonUserData = userData.toJson();
+  console.log(jsonUserData);
+}
+
+
+//Set custom validation method
+function customValidation(data) {
+  const input = data.querySelector("input")
+  const inputError = data.dataset.error;
+
+  if (!input.validity.valid) {
+    console.log(`Invalid ${input.name}`)
+    data.style.content = inputError;
+    data.setAttribute("data-error-visible", "true");
+    input.setCustomValidity(inputError);
   } else {
-    e.target.setCustomValidity("");
+    data.style.content = "";
+    console.log(`Valid ${input.name}`)
+    data.removeAttribute("data-error-visible");
+    data.setAttribute("data-error-visible", "false");
+    data.setCustomValidity("");
   }
 }
 
+//Check inputs of each formData to see if they are valid according to customValidation
+formData.forEach(data => {
+  const input = data.querySelector("input");
+  input.addEventListener("change", () => {
+    customValidation(data);
+  });
+});
+
 function processFormSubmission(e) {
   e.preventDefault();
-
-  let userData = new UserData();
-
-
-  // Convert the UserData instance to JSON
-  // let jsonUserData = userData.toJson();
-  // console.log(jsonUserData);
+  getUserData();
   closeModal(modalbg);
   form.reset();
 
@@ -114,4 +161,4 @@ function processFormSubmission(e) {
   }, 200);
 }
 
-form.addEventListener("submit", processFormSubmission)
+form.addEventListener("submit", processFormSubmission);

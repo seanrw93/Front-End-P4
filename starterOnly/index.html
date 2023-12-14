@@ -64,8 +64,7 @@
             >
               <div
                 class="formData"
-                data-error
-                data-error-visible="false">
+                data-error="Please enter 2+ characters for name field">
                 <label for="first">First Name</label><br>
                 <input
                   class="text-control"
@@ -78,8 +77,7 @@
               </div>
               <div
                 class="formData"
-                data-error
-                data-error-visible="false">
+                data-error="Please enter 2+ characters for name field">
                 <label for="last">Last Name</label><br>
                 <input
                   class="text-control"
@@ -92,8 +90,7 @@
               </div>
               <div
                 class="formData"
-                data-error
-                data-error-visible="false">
+                data-error="You must enter a valid email address">
                 <label for="email">Email</label><br>
                 <input
                   class="text-control"
@@ -106,21 +103,20 @@
               </div>
               <div
                 class="formData"
-                data-error
-                data-error-visible="false">
+                data-error="Please enter your date of birth">
                 <label for="birthdate">Birthdate</label><br>
                 <input
                   class="text-control"
                   type="date"
                   id="birthdate"
                   name="birthdate"
+                  min="1900-01-01"
                   required
                 /><br>
               </div>
               <div
                 class="formData"
-                data-error
-                data-error-visible="false">
+                data-error="Please enter a number">
                 <label for="quantity">How many tournaments have you attended? </label><br>
                 <input 
                   type="number" 
@@ -135,8 +131,7 @@
               <p class="text-label">Where do you want to participate this year?</p>
               <div
                 class="formData"
-                data-error
-                data-error-visible="false">
+                data-error="Please select one of the options">
                 <input
                   class="checkbox-input"
                   type="radio"
@@ -208,12 +203,12 @@
 
               <div
                 class="formData"
-                data-error
-                data-error-visible="false">
+                data-error="You must agree to the terms and conditions">
                 <input
                   class="checkbox-input"
                   type="checkbox"
                   id="checkbox1"
+                  name="conditions"
                   required
                 />
                 <label class="checkbox2-label" for="checkbox1">
