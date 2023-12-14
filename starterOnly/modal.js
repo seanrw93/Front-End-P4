@@ -120,22 +120,22 @@ function getUserData() {
 //Set styles for input with invalid values
 function addInvalidityStyles(inputParent, input, inputError) {
   if (inputError) {
-    inputParent.style.content = inputError;
+    inputParent.setAttribute("data-error", inputError);
+    inputParent.style.content = inputParent.getAttribute("data-error");
     inputParent.setAttribute("data-error-visible", "true");
     input.setCustomValidity(inputError);
   } else {
     inputParent.style.content = "";
+    inputParent.removeAttribute("data-error");
     inputParent.removeAttribute("data-error-visible");
     input.setCustomValidity("");
   }
-
-  console.log(inputError);
 }
 
 //Custom validation checks
 function handleNameValidation(inputParent) {
   const input = inputParent.querySelector("input");
-  let inputError = inputParent.dataset.error;
+  let inputError;
 
   if (input.value.trim() === "") {
     if (input.name === "first") {
@@ -152,7 +152,7 @@ function handleNameValidation(inputParent) {
 
 function handleEmailValidation(inputParent) {
   const input = inputParent.querySelector("input");
-  let inputError = inputParent.dataset.error;
+  let inputError;
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if(input.value.trim() === "" || !emailRegex.test(input.value)) {
@@ -165,7 +165,7 @@ function handleEmailValidation(inputParent) {
 
 function handleAgeValidation(inputParent) {
   const input = inputParent.querySelector("input");
-  let inputError = inputParent.dataset.error;
+  let inputError;;
 
   const ageRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
   if (input.value.trim() === "" || !ageRegex.test(input.value)) {
@@ -177,7 +177,7 @@ function handleAgeValidation(inputParent) {
 
 function handleQuantityValidation(inputParent) {
   const input = inputParent.querySelector("input");
-  let inputError = inputParent.dataset.error;
+  let inputError;
 
   if (isNaN(input.value) || input.value < 1 || input.value.trim() === "") {
     inputError = "Please enter the amount of tournaments";
@@ -186,14 +186,14 @@ function handleQuantityValidation(inputParent) {
   addInvalidityStyles(inputParent, input, inputError);
 }
 
-function handleConditionsValidation(inputParent) {
-  const input = inputParent.querySelector("input");
-  let inputError = inputParent.dataset.error;
+// function handleConditionsValidation(inputParent) {
+//   const input = inputParent.querySelector("input");
+//   let inputError = inputParent.dataset.error;
 
-}
+// }
 
 //Check inputs of each formData to see if they are valid according to customValidation
-//Today's date used forax value of date input
+//Today's date used for max value of date input
 formData.forEach(data => {
   const input = data.querySelector("input");
   if (input.name === "birthdate") {
@@ -219,8 +219,8 @@ formData.forEach(data => {
 function processFormSubmission(e) {
   e.preventDefault();
   getUserData();
-  closeModal(modalbg);
   form.reset();
+  closeModal(modalbg);
   launchModal(modalConf)
 }
 

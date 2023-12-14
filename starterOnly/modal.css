@@ -263,7 +263,7 @@ input {
   margin-bottom: 7px;
   text-align: right;
   line-height: 0.3;
-  opacity: 0;
+  opacity: 1;
   transition: 0.3s;
 }
 
