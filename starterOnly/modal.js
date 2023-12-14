@@ -1,11 +1,14 @@
 function toggleResponsiveNav() {
-  const x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
+  const nav = document.getElementById("myTopnav");
+  if (nav.className === "topnav") {
+    nav.className += " responsive";
   } else {
-    x.className = "topnav";
+    nav.className = "topnav";
   }
 }
+
+const icon = document.querySelector(".icon")
+icon.addEventListener("click", toggleResponsiveNav)
 
 
 // DOM Elements
@@ -75,13 +78,6 @@ function getTodaysdate() {
   return `${currentYear}-${currentMonth}-${currentDate}`
 }
 
-formData.forEach(data => {
-  const input = data.querySelector("input")
-  if (input.name === "birthdate") {
-    input.setAttribute("max", `${getTodaysdate()}`)
-  }
-})
-
 //Class to hold form data 
 class UserData {
   constructor(first, last, email, birthdate, quantity, location, conditions) {
@@ -107,7 +103,6 @@ class UserData {
   }
 }
 
-
 //Collect form data and store in a new userData object
 function getUserData() {
   let userData = new UserData();
@@ -122,43 +117,112 @@ function getUserData() {
   console.log(jsonUserData);
 }
 
-
-//Set custom validation method
-function customValidation(data) {
-  const input = data.querySelector("input")
-  const inputError = data.dataset.error;
-
-  if (!input.validity.valid) {
-    console.log(`Invalid ${input.name}`)
-    data.style.content = inputError;
-    data.setAttribute("data-error-visible", "true");
+//Set styles for input with invalid values
+function addInvalidityStyles(inputParent, input, inputError) {
+  if (inputError) {
+    inputParent.style.content = inputError;
+    inputParent.setAttribute("data-error-visible", "true");
     input.setCustomValidity(inputError);
   } else {
-    data.style.content = "";
-    console.log(`Valid ${input.name}`)
-    data.removeAttribute("data-error-visible");
-    data.setAttribute("data-error-visible", "false");
-    data.setCustomValidity("");
+    inputParent.style.content = "";
+    inputParent.removeAttribute("data-error-visible");
+    input.setCustomValidity("");
   }
+
+  console.log(inputError);
+}
+
+//Custom validation checks
+function handleNameValidation(inputParent) {
+  const input = inputParent.querySelector("input");
+  let inputError = inputParent.dataset.error;
+
+  if (input.value.trim() === "") {
+    if (input.name === "first") {
+      inputError = "Please enter your first name";
+    } else {
+      inputError = "Please enter your last name";
+    }
+  } else if (input.value.length < 3) {
+    inputError = "Please enter 2 or more characters";
+  }
+
+  addInvalidityStyles(inputParent, input, inputError);
+}
+
+function handleEmailValidation(inputParent) {
+  const input = inputParent.querySelector("input");
+  let inputError = inputParent.dataset.error;
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(input.value.trim() === "" || !emailRegex.test(input.value)) {
+    inputError = "Please enter a valid email address";
+  }
+
+  addInvalidityStyles(inputParent, input, inputError);
+}
+
+
+function handleAgeValidation(inputParent) {
+  const input = inputParent.querySelector("input");
+  let inputError = inputParent.dataset.error;
+
+  const ageRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+  if (input.value.trim() === "" || !ageRegex.test(input.value)) {
+    inputError = "Please enter your date of birth"
+  }
+
+  addInvalidityStyles(inputParent, input, inputError);
+}
+
+function handleQuantityValidation(inputParent) {
+  const input = inputParent.querySelector("input");
+  let inputError = inputParent.dataset.error;
+
+  if (isNaN(input.value) || input.value < 1 || input.value.trim() === "") {
+    inputError = "Please enter the amount of tournaments";
+  }
+
+  addInvalidityStyles(inputParent, input, inputError);
+}
+
+function handleConditionsValidation(inputParent) {
+  const input = inputParent.querySelector("input");
+  let inputError = inputParent.dataset.error;
+
 }
 
 //Check inputs of each formData to see if they are valid according to customValidation
+//Today's date used forax value of date input
 formData.forEach(data => {
   const input = data.querySelector("input");
-  input.addEventListener("change", () => {
-    customValidation(data);
-  });
+  if (input.name === "birthdate") {
+    input.setAttribute("max", `${getTodaysdate()}`)
+  }
+
+  switch (input.type) {
+    case "text": 
+    input.addEventListener("change", () => handleNameValidation(data));
+    break;
+  case "email":
+    input.addEventListener("change", () => handleEmailValidation(data));
+    break;
+  case "date": 
+    input.addEventListener("change", () => handleAgeValidation(data));
+    break;
+  case "number":
+    input.addEventListener("change", () => handleQuantityValidation(data));
+  }
 });
 
+//Process form information
 function processFormSubmission(e) {
   e.preventDefault();
   getUserData();
   closeModal(modalbg);
   form.reset();
-
-  setTimeout(() => {
-    launchModal(modalConf)
-  }, 200);
+  launchModal(modalConf)
 }
 
+//Submit form
 form.addEventListener("submit", processFormSubmission);

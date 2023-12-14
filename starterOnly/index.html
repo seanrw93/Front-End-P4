@@ -23,7 +23,7 @@
       <a href="#"><span>About Us</span></a>
       <a href="#"><span>Contact</span></a>
       <a href="#"><span>Past Events</span></a>
-      <a href="javascript:void(0);" class="icon" onclick="toggleResponsiveNav()">
+      <a href="javascript:void(0);" class="icon">
         <i class="fa fa-bars"></i>
       </a>
     </div>
@@ -64,46 +64,40 @@
             >
               <div
                 class="formData"
-                data-error="Please enter 2+ characters for name field">
+                data-error>
                 <label for="first">First Name</label><br>
                 <input
                   class="text-control"
                   type="text"
                   id="first"
                   name="first"
-                  minlength="2"
-                  required
                 /><br>
               </div>
               <div
                 class="formData"
-                data-error="Please enter 2+ characters for name field">
+                data-error>
                 <label for="last">Last Name</label><br>
                 <input
                   class="text-control"
                   type="text"
                   id="last"
                   name="last"
-                  minlength="2"
-                  required
                 /><br>
               </div>
               <div
                 class="formData"
-                data-error="You must enter a valid email address">
+                data-error>
                 <label for="email">Email</label><br>
                 <input
                   class="text-control"
                   type="email"
                   id="email"
                   name="email"
-                  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-                  required
                 /><br>
               </div>
               <div
                 class="formData"
-                data-error="Please enter your date of birth">
+                data-error>
                 <label for="birthdate">Birthdate</label><br>
                 <input
                   class="text-control"
@@ -111,12 +105,11 @@
                   id="birthdate"
                   name="birthdate"
                   min="1900-01-01"
-                  required
                 /><br>
               </div>
               <div
                 class="formData"
-                data-error="Please enter a number">
+                data-error>
                 <label for="quantity">How many tournaments have you attended? </label><br>
                 <input 
                   type="number" 
@@ -125,20 +118,18 @@
                   name="quantity" 
                   min="0" 
                   max="99"
-                  required
                 />
               </div>
               <p class="text-label">Where do you want to participate this year?</p>
               <div
                 class="formData"
-                data-error="Please select one of the options">
+                data-error>
                 <input
                   class="checkbox-input"
                   type="radio"
                   id="location1"
                   name="location"
                   value="New York"
-                  required
                 />
                 <label class="checkbox-label" for="location1">
                   <span class="checkbox-icon"></span>
@@ -202,14 +193,13 @@
               </div>
 
               <div
-                class="formData"
-                data-error="You must agree to the terms and conditions">
+                class="formData">
                 <input
                   class="checkbox-input"
                   type="checkbox"
                   id="checkbox1"
                   name="conditions"
-                  required
+                  data-error
                 />
                 <label class="checkbox2-label" for="checkbox1">
                   <span class="checkbox-icon"></span>
