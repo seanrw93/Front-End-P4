@@ -8,7 +8,8 @@ function toggleResponsiveNav() {
 }
 
 // DOM Elements
-const modalbg = document.querySelector(".bground");
+const modalbg = document.querySelector(".modal-form");
+const modalConf = document.querySelector(".modal-confirm")
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const closeBtn = document.querySelector(".close")
@@ -17,28 +18,34 @@ const form = document.forms.reserve;
 // launch modal event
 modalBtn.forEach(btn => {
   btn.addEventListener("click", () => {
-    launchModal();
+    launchModal(modalbg);
   })
 });
 
 //Close modal event
-closeBtn.addEventListener("click", () => closeModal());
+closeBtn.addEventListener("click", e => {
+  if (e.target.classList.contains("close")) {
+    closeModal(modalbg);
+    closeModal(modalBtn);
+  }
+});
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") {
-    closeModal();
+    closeModal(modalbg);
+    closeModal(modalConf);
   }
 })
 
 
 // launch modal form
-function launchModal() {
-  modalbg.style.display = "block";
+function launchModal(modal) {
+  modal.style.display = "block";
   disablePageScroll();
 }
 
 //Close modal form
-function closeModal() {  
-  modalbg.style.display = "none";
+function closeModal(modal) {  
+  modal.style.display = "none";
   closeBtn.blur();
   enablePageScroll();
 
@@ -80,17 +87,37 @@ class UserData {
   }
 }
 
+function handleValueMissing(e, errorMessage) {
+  if (e.target.validity.valueMissing) {
+    e.target.setCustomValidity(errorMessage);
+  } else {
+    e.target.setCustomValidity("");
+  }
+}
+
 function processFormSubmission(e) {
   e.preventDefault();
 
-  // let userData = new UserData();
+  let userData = new UserData();
+
+  // formData.forEach(formElement => {
+  //   const input = formElement.querySelector(".input");
+
+  //   switch (input.name) {
+  //     case "first": 
+  //       input.addEventListener("input", e => handleValueMissing(e, "Please enter your first name"));
+  //       break;
+  //   }
+  // })
 
   // Convert the UserData instance to JSON
   // let jsonUserData = userData.toJson();
   // console.log(jsonUserData);
+  closeModal(modalbg);
 
-  closeModal();
-
+  setTimeout(() => {
+    launchModal(modalConf)
+  }, 200);
 }
 
 form.addEventListener("submit", processFormSubmission)

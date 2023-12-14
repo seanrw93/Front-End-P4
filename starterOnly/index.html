@@ -52,7 +52,8 @@
         </button>
       </div>
 
-      <div class="bground">
+<!-- Form modal START -->
+      <div class="bground modal-form">
         <div class="content">
           <span class="close"></span>
           <div class="modal-body">
@@ -69,7 +70,7 @@
                   type="text"
                   id="first"
                   name="first"
-                  pattern=".{2,}"
+                  minlength="2"
                   required
                 /><br>
               </div>
@@ -81,7 +82,7 @@
                   type="text"
                   id="last"
                   name="last"
-                  pattern=".{2,}"
+                  minlength="2"
                   required
                 /><br>
               </div>
@@ -227,6 +228,18 @@
           </div>
         </div>
       </div>
+<!-- Form modal END -->
+
+<!-- Confirmation modal START -->
+      <div class="bground modal-confirm">
+        <div class="content">
+          <span class="close"></span>
+          <div class="modal-body">
+
+          </div>
+        </div>
+      </div>
+<!-- Confirmation modal END -->
     </main>
     <footer>
       <p class="copyrights">
