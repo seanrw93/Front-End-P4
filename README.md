@@ -7,4 +7,4 @@ This repo contains all the starting code you need to add the functionality requi
 3. There are no dependencies
 4. Remember you need to use custom CSS and Vanilla JavaScript, no jquery, no bootstrap, etc.
 
-Link to live version [here](seanrw93.github.io/Front-End-P4/starterOnly)
+Link to live version [here](https://seanrw93.github.io/Front-End-P4/starterOnly)
