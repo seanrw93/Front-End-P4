@@ -149,6 +149,8 @@ function handleValidation(inputParent) {
     case "number":
       inputError = quantityCheck(input);
       break;
+
+    //More cases to come for other checks
   }
 
   console.log("inputError:", inputError);
