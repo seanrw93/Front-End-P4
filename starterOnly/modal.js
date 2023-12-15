@@ -132,59 +132,128 @@ function addInvalidityStyles(inputParent, input, inputError) {
   }
 }
 
-//Custom validation checks
-function handleNameValidation(inputParent) {
+function handleValidation(inputParent) {
   const input = inputParent.querySelector("input");
-  let inputError;
+  let inputError = null;
 
+  switch(input.type) {
+    case "text":
+      inputError = nameCheck(input);
+      break;
+    case "email":
+      inputError = emailCheck(input);
+      break;
+    case "date":
+      inputError = ageCheck(input);
+      break;
+    case "number":
+      inputError = quantityCheck(input);
+      break;
+  }
+
+  console.log("inputError:", inputError);
+
+  addInvalidityStyles(inputParent, input, inputError);
+}
+
+function nameCheck(input) {
   if (input.value.trim() === "") {
     if (input.name === "first") {
-      inputError = "Please enter your first name";
+      console.log("Error: Please enter your first name");
+      return "Please enter your first name";
     } else {
-      inputError = "Please enter your last name";
+      console.log("Error: Please enter your last name");
+      return "Please enter your last name";
     }
   } else if (input.value.length < 3) {
-    inputError = "Please enter 2 or more characters";
+    console.log("Error: Please enter 2+ characters");
+    return "Please enter 2 or more characters";
+  } else {
+    return null;
   }
-
-  addInvalidityStyles(inputParent, input, inputError);
 }
 
-function handleEmailValidation(inputParent) {
-  const input = inputParent.querySelector("input");
-  let inputError;
-
+function emailCheck(input) {
+  console.log("emailCheck called with input:", input)
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if(input.value.trim() === "" || !emailRegex.test(input.value)) {
-    inputError = "Please enter a valid email address";
+    return "Please enter a valid email address";
+  } else {
+    return null;
   }
-
-  addInvalidityStyles(inputParent, input, inputError);
 }
 
-
-function handleAgeValidation(inputParent) {
-  const input = inputParent.querySelector("input");
-  let inputError;;
-
+function ageCheck(input) {
+  console.log("ageCheck called with input:", input)
   const ageRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
   if (input.value.trim() === "" || !ageRegex.test(input.value)) {
-    inputError = "Please enter your date of birth"
+    return "Please enter your date of birth"
+  } else {
+    return null;
   }
-
-  addInvalidityStyles(inputParent, input, inputError);
 }
 
-function handleQuantityValidation(inputParent) {
-  const input = inputParent.querySelector("input");
-  let inputError;
-
+function checkQuantity(input) {
   if (isNaN(input.value) || input.value < 1 || input.value.trim() === "") {
-    inputError = "Please enter the amount of tournaments";
+    return "Please enter the amount of tournaments";
+  } else {
+    return null
   }
-
-  addInvalidityStyles(inputParent, input, inputError);
 }
+
+// //Custom validation checks
+// function handleNameValidation(inputParent) {
+//   const input = inputParent.querySelector("input");
+//   let inputError;
+
+//   if (input.value.trim() === "") {
+//     if (input.name === "first") {
+//       inputError = "Please enter your first name";
+//     } else {
+//       inputError = "Please enter your last name";
+//     }
+//   } else if (input.value.length < 3) {
+//     inputError = "Please enter 2 or more characters";
+//   }
+
+//   addInvalidityStyles(inputParent, input, inputError);
+// }
+
+// function handleEmailValidation(inputParent) {
+//   const input = inputParent.querySelector("input");
+//   let inputError;
+
+//   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//   if(input.value.trim() === "" || !emailRegex.test(input.value)) {
+//     inputError = "Please enter a valid email address";
+//   }
+
+//   addInvalidityStyles(inputParent, input, inputError);
+// }
+
+
+// function handleAgeValidation(inputParent) {
+//   const input = inputParent.querySelector("input");
+//   let inputError;
+
+//   const ageRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+//   if (input.value.trim() === "" || !ageRegex.test(input.value)) {
+//     inputError = "Please enter your date of birth"
+//   }
+
+//   addInvalidityStyles(inputParent, input, inputError);
+// }
+
+// function handleQuantityValidation(inputParent) {
+//   const input = inputParent.querySelector("input");
+//   let inputError;
+
+//   if (isNaN(input.value) || input.value < 1 || input.value.trim() === "") {
+//     inputError = "Please enter the amount of tournaments";
+//   }
+
+//   addInvalidityStyles(inputParent, input, inputError);
+// }
 
 // function handleConditionsValidation(inputParent) {
 //   const input = inputParent.querySelector("input");
@@ -197,22 +266,24 @@ function handleQuantityValidation(inputParent) {
 formData.forEach(data => {
   const input = data.querySelector("input");
   if (input.name === "birthdate") {
-    input.setAttribute("max", `${getTodaysdate()}`)
+    input.setAttribute("max", getTodaysdate())
   }
 
-  switch (input.type) {
-    case "text": 
-    input.addEventListener("change", () => handleNameValidation(data));
-    break;
-  case "email":
-    input.addEventListener("change", () => handleEmailValidation(data));
-    break;
-  case "date": 
-    input.addEventListener("change", () => handleAgeValidation(data));
-    break;
-  case "number":
-    input.addEventListener("change", () => handleQuantityValidation(data));
-  }
+  input.addEventListener("change", () => handleValidation(data));
+
+  // switch (input.type) {
+  //   case "text": 
+  //   input.addEventListener("change", () => handleNameValidation(data));
+  //   break;
+  // case "email":
+  //   input.addEventListener("change", () => handleEmailValidation(data));
+  //   break;
+  // case "date": 
+  //   input.addEventListener("change", () => handleAgeValidation(data));
+  //   break;
+  // case "number":
+  //   input.addEventListener("change", () => handleQuantityValidation(data));
+  // }
 });
 
 //Process form information
