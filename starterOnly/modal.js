@@ -56,26 +56,20 @@ function closeModal(modal) {
   modal.style.display = "none";
   enablePageScroll();
 
-  // Reset custom validity for each input
-  formData.forEach(data => {
-    const input = data.querySelector("input");
-    input.setCustomValidity("");
-  });
-
   // Remove specified attributes from each element
   formData.forEach(data => {
-    const inputParent = data.querySelector(".formData");
 
-    // Check if inputParent is not null before accessing properties
-    if (inputParent) {
-      inputParent.style.content = "";
-      inputParent.removeAttribute("data-error");
-      inputParent.removeAttribute("data-error-visible");
+    // Check if data is not null before accessing properties
+    if (data) {
+      data.style.content = "";
+      data.removeAttribute("data-error");
+      data.setAttribute("data-error-visible", "false");
     }
   });
 
   form.reset();
 }
+
 // Disable page scroll
 function disablePageScroll() {
   document.body.style.overflow = "hidden";
@@ -135,156 +129,135 @@ function getUserData() {
   console.log(jsonUserData);
 }
 
-//Set styles for input with invalid values
-function addInvalidityStyles(inputParent, input, inputError) {
-  if (inputError) {
-    inputParent.setAttribute("data-error", inputError);
-    inputParent.style.content = inputParent.getAttribute("data-error");
-    inputParent.setAttribute("data-error-visible", "true");
-    input.setCustomValidity(inputError);
-  } else {
-    inputParent.style.content = "";
-    inputParent.removeAttribute("data-error");
-    inputParent.removeAttribute("data-error-visible");
-    input.setCustomValidity("");
+//Handle error messages
+const required = value => value || value.trim() !== "";
+const minLengthCheck = min => value => value.length >= min;
+const maxLengthCheck = max => value => value.length <= max;
+const minValCheck = min => value => Number(value) >= min;
+const maxValCheck = max => value => Number(value) <= max;
+const patternCheck = regex => value => regex.test(value);
+
+//Custom validation for each input
+const fields = {
+  first : {
+    validator: value => minLengthCheck(2)(value) && required(value),
+    errorMessage: "Please enter a first name that is 2+ characters long",
+  },
+  last : {
+    validator: value => minLengthCheck(2)(value) && required(value),
+    errorMessage: "Please enter a last name that is 2+ characters long",
+  },
+  email: {
+    validator: value => patternCheck(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)(value) && required(value),
+    errorMessage: "Please enter a valid email address",
+  },
+  birthdate: {
+    validator: value => patternCheck(/^\d{4}-\d{2}-\d{2}$/)(value) && required(value),
+    errorMessage: "Please enter a valid birth date in DD/MM/YYYY format",
+  },
+  quantity: {
+    validator: value => minValCheck(0)(value) && maxValCheck(99)(value) && required(value),
+    errorMessage: "Please enter the amount of tournaments have participated in",
+  },
+  location: {
+    validator: _ => Array.from(document.querySelectorAll('[name="location"]')).some(radio => radio.checked),
+    errorMessage: "Please choose a location",
+  },
+  termsConds : {
+    validator: _ => document.querySelector('[name="termsConds"]').checked,
+    errorMessage: "Please accept the terms and conditions",
   }
-}
+};
 
-//Generate error messages to be used in check functions
-function errorMessage({minCharLength = null} = {}) {
-    const errors = {
-      firstNameError: "Please enter your first name",
-      lastNameError: "Please enter your first name",
-      birthdateError: "Please enter your birthdate",
-      minCharError: minCharLength ? `Please enter ${minCharLength} or more characters` : null
-    }
-
-    return errors
-}
-
-function handleValidation(inputParent) {
-  const input = inputParent.querySelector("input");
-  let inputError = null;
-
-  switch(input.name) {
-    case "first":
-    case "last": 
-      inputError = nameCheck(input, 3);
-      break;
-    case "email":
-      inputError = emailCheck(input);
-      break;
-    case "birthdate":
-      inputError = ageCheck(input);
-      break;
-    case "quantity":
-      inputError = quantityCheck(input);
-      break;
-    case "location":
-      inputError = locationCheck(input);
-      break;
-
-    //More cases to come for other checks
-  }
-
-  console.log("inputError:", inputError);
-
-  addInvalidityStyles(inputParent, input, inputError);
-}
-
-function nameCheck(input, min) {
-  if (input.value.trim() === "") {
-    if (input.name === "first") {
-      return errorMessage().firstNameError;
-    } else {
-      return errorMessage().lastNameError;
-    }
-  } else if (input.value.length < min) {
-    return errorMessage({minCharLength: min - 1}).minCharError;
-  } else {
-    return null;
-  }
-}
-
-function emailCheck(input) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if(input.value.trim() === "" || !emailRegex.test(input.value)) {
-    return errorMessage().emailError;
-  } else {
-    return null;
-  }
-}
-
-function ageCheck(input) {
-  console.log("ageCheck called with input:", input)
-  const ageRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
-  if (input.value.trim() === "" || !ageRegex.test(input.value)) {
-    return errorMessage().birthdateError;
-  } else {
-    return null;
-  }
-}
-
-function quantityCheck(input) {
-  if (isNaN(input.value) || input.value < 1 || input.value.trim() === "") {
-    return "Please enter the amount of tournaments";
-  } else {
-    return null
-  }
-}
-
-function locationCheck(input) {
-  const radioButtons = input.getElementsByName("location");
-  let radioButtonChecked = false;
-
-  for (let i = 0; i < radioButtons.length; i++) {
-    if (radioButtons[i].checked) {
-      radioButtonChecked = true;
-      break;
-    }
-  }
-
-  if (!radioButtonChecked) {
-    return "Please choose a location"
-  } else {
-    return null
-  }
-}
-
-//Check inputs of each formData to see if they are valid according to customValidation
-//Today's date used for max value of date input
+//Get latest date in calendar 
 formData.forEach(data => {
   const input = data.querySelector("input");
   if (input.name === "birthdate") {
     input.setAttribute("max", getTodaysDate())
   }
+})
 
-  input.addEventListener("change", () => handleValidation(data));
-});
+//Set styles for input with invalid values
+function handleErrorMessage(input, errorMessage = null) {
+  const inputParent = input.parentElement
 
-//Process form information
-function processFormSubmission(e) {
-  e.preventDefault();
-
-  let formIsValid = true;
-
-  formData.forEach(data => {
-    const input = data.querySelector("input");
-    if (!input.value || input.value.trim() === "") {
-      input.setCustomValidity("Did you see this field?");
-      formIsValid = false;
-    } else {
-      input.setCustomValidity("");
-    }
-  });
-
-  if (formIsValid) {
-    getUserData();
-    form.reset();
-    closeModal(modalbg);
-    launchModal(modalConf);
+  if (errorMessage) {
+    inputParent.setAttribute("data-error", errorMessage);
+    inputParent.setAttribute("data-error-visible", "true");
+  } else {
+    inputParent.removeAttribute("data-error");
+    inputParent.removeAttribute("data-error-visible");
   }
 }
 
+//Check if input is valid
+function validateInput(input) {
+  if (!input) return false;
+
+  const fieldName = input.getAttribute("name");
+  const validation = fields[fieldName];
+  const value = input.type === "checkbox" ? input.checked : input.value;
+
+  let isValid = validation.validator(value);
+
+  // Call handleErrorMessage function
+  handleErrorMessage(input, isValid ? null : validation.errorMessage);
+
+  return isValid;
+}
+
+//Add event listener to each input
+for (const fieldName in fields) {
+  const input = document.querySelector(`[name="${fieldName}"]`);
+
+  input.addEventListener("change", () => {
+      validateInput(input);
+  });
+
+}
+
+//List of required checkboxes
+const requiredCheckboxes = ["termsConds"]
+
 //Submit form
-form.addEventListener("submit", processFormSubmission);
+form.addEventListener("submit", e => {
+    e.preventDefault();
+
+    let isValid = true;
+
+    // Check if each input is valid
+    for (const fieldName in fields) {
+        const inputs = document.querySelectorAll(`[name="${fieldName}"]`);
+        let isValidField = true;
+
+        inputs.forEach(input => {
+          if (input.type === "radio" || input.type === "checkbox") {
+              if (requiredCheckboxes.includes(fieldName)) {
+                  isValidField = input.checked;
+              } else {
+                  input = document.querySelector(`[name="${fieldName}"]:checked`);
+                  isValidField = validateInput(input);
+              }
+          } else {
+              isValidField = validateInput(input);
+          }
+        })
+
+        // If the field is not valid, display the error message
+        if (!isValidField && (fieldName === "location" || fieldName === "termsConds")) {
+            handleErrorMessage(inputs[0], fields[fieldName].errorMessage);
+        }
+
+        isValid = isValidField && isValid;
+    }
+
+    // If all inputs are valid, get user data, reset form, close modal and launch confirmation modal
+    if (isValid) {
+        getUserData();
+        form.reset();
+        closeModal(modalbg);
+        launchModal(modalConf);
+    }
+
+    console.log(isValid);
+});
