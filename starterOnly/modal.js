@@ -100,7 +100,7 @@ class UserData {
     this.birthdate = birthdate;
     this.quantity = quantity;
     this.location = location;
-    this.notifications = notifications || [];
+    this.notifications = notifications;
   }
 
   toJson() {
@@ -252,7 +252,9 @@ form.addEventListener("submit", e => {
     }
 
     // If all inputs are valid, get user data, reset form, close modal and launch confirmation modal
-    if (isValid) {
+    if (!isValid) {
+      setTimeout(() => alert("Some fields are invalid. Please check the form and try again."), 0);
+    } else {
         getUserData();
         form.reset();
         closeModal(modalbg);
