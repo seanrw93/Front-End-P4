@@ -111,7 +111,7 @@ class UserData {
       birthdate: this.birthdate,
       quantity: this.quantity,
       location: this.location,
-      notifications: this.notifications
+      notifications: this.notifications ? "On" : "Off",
     }
   }
 }
@@ -120,9 +120,10 @@ class UserData {
 function getUserData() {
   let userData = new UserData();
 
-  formData.forEach(data => {
-    const input = data.querySelector("input");
-    userData[input.name] = input.value;
+  let inputs = document.querySelectorAll("input");
+
+  inputs.forEach(input => {
+    input.name === "notifications" ? userData[input.name] = input.checked : userData[input.name] = input.value;
   })
 
   // Convert the UserData instance to JSON
@@ -248,7 +249,7 @@ form.addEventListener("submit", e => {
             handleErrorMessage(inputs[0], fields[fieldName].errorMessage);
         }
 
-        isValid = isValidField && isValid;
+        isValid &&= isValidField;
     }
 
     // If all inputs are valid, get user data, reset form, close modal and launch confirmation modal
@@ -261,5 +262,4 @@ form.addEventListener("submit", e => {
         launchModal(modalConf);
     }
 
-    console.log(isValid);
 });
