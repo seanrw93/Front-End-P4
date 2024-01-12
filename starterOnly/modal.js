@@ -1,3 +1,4 @@
+//Responsive nav bar
 function toggleResponsiveNav() {
   const nav = document.getElementById("myTopnav");
   if (nav.className === "topnav") {
@@ -7,16 +8,16 @@ function toggleResponsiveNav() {
   }
 }
 
-const icon = document.querySelector(".icon")
-icon.addEventListener("click", toggleResponsiveNav)
+const icon = document.querySelector(".icon");
+icon.addEventListener("click", toggleResponsiveNav);
 
 
 // DOM Elements
 const modalbg = document.querySelector(".modal-form");
-const modalConf = document.querySelector(".modal-confirm")
+const modalConf = document.querySelector(".modal-confirm");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-const closeBtn = document.querySelectorAll(".close")
+const closeBtn = document.querySelectorAll(".close");
 const closeModalbtn = document.querySelector(".btn-close")
 const form = document.forms.reserve;
 
@@ -92,14 +93,14 @@ function getTodaysDate() {
 
 //Class to hold form data 
 class UserData {
-  constructor(first, last, email, birthdate, quantity, location, conditions) {
+  constructor( {first, last, email, birthdate, quantity, location, notifications} ) {
     this.first = first;
     this.last = last;
     this.email = email;
     this.birthdate = birthdate;
     this.quantity = quantity;
     this.location = location;
-    this.conditions = conditions || [];
+    this.notifications = notifications || [];
   }
 
   toJson() {
@@ -110,7 +111,7 @@ class UserData {
       birthdate: this.birthdate,
       quantity: this.quantity,
       location: this.location,
-      conditions: this.conditions
+      notifications: this.notifications
     }
   }
 }
