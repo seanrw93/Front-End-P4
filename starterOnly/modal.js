@@ -93,7 +93,7 @@ function getTodaysDate() {
 
 //Class to hold form data 
 class UserData {
-  constructor( {first, last, email, birthdate, quantity, location, notifications} ) {
+  constructor(first, last, email, birthdate, quantity, location, notifications) {
     this.first = first;
     this.last = last;
     this.email = email;
