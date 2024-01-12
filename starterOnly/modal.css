@@ -267,6 +267,16 @@ input {
   transition: 0.3s;
 }
 
+.formData[data-error]:nth-last-child(3)::after {
+  margin-top: -20px;
+  margin-bottom: 20px;
+}
+
+.formData[data-error]:nth-last-child(2)::after {
+  margin-top: 5px;
+  margin-bottom: 30px;
+}
+
 .formData[data-error-visible="true"] .text-control {
   border: 2px solid #e54858;
 }
