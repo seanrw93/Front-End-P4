@@ -131,41 +131,40 @@ function getUserData() {
 }
 
 //Handle error messages
-const required = value => value || value.trim() !== "";
-const minLengthCheck = min => value => value.length >= min;
-const maxLengthCheck = max => value => value.length <= max;
-const minValCheck = min => value => Number(value) >= min;
-const maxValCheck = max => value => Number(value) <= max;
-const patternCheck = regex => value => regex.test(value);
+const required = () => (value) => value || value.trim() !== "";
+const minLengthCheck = (min) => (value) => value.length >= min;
+const minValCheck = (min) => (value) => Number(value) >= min;
+const maxValCheck = (max) => (value) => Number(value) <= max;
+const patternCheck = (regex) => (value) => regex.test(value);
 
 //Custom validation for each input
 const fields = {
   first : {
-    validator: value => minLengthCheck(2)(value) && required(value),
+    validator: value => minLengthCheck(2)(value) && required()(value),
     errorMessage: "Please enter a first name that is 2+ characters long",
   },
   last : {
-    validator: value => minLengthCheck(2)(value) && required(value),
+    validator: value => minLengthCheck(2)(value) && required()(value),
     errorMessage: "Please enter a last name that is 2+ characters long",
   },
   email: {
-    validator: value => patternCheck(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)(value) && required(value),
+    validator: value => patternCheck(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)(value) && required()(value),
     errorMessage: "Please enter a valid email address",
   },
   birthdate: {
-    validator: value => patternCheck(/^\d{4}-\d{2}-\d{2}$/)(value) && required(value),
+    validator: value => patternCheck(/^\d{4}-\d{2}-\d{2}$/)(value) && required()(value),
     errorMessage: "Please enter a valid birth date in DD/MM/YYYY format",
   },
   quantity: {
-    validator: value => minValCheck(0)(value) && maxValCheck(99)(value) && required(value),
+    validator: value => minValCheck(0)(value) && maxValCheck(99)(value) && required()(value),
     errorMessage: "Please enter the amount of tournaments have participated in",
   },
   location: {
-    validator: _ => Array.from(document.querySelectorAll('[name="location"]')).some(radio => radio.checked),
+    validator: () => Array.from(document.querySelectorAll('[name="location"]')).some(radio => radio.checked),
     errorMessage: "Please choose a location",
   },
   termsConds : {
-    validator: _ => document.querySelector('[name="termsConds"]').checked,
+    validator: () => document.querySelector('[name="termsConds"]').checked,
     errorMessage: "Please accept the terms and conditions",
   }
 };
