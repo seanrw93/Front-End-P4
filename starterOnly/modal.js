@@ -159,10 +159,10 @@ const fields = {
     validator: value => minValCheck(0)(value) && maxValCheck(99)(value) && required()(value),
     errorMessage: "Please enter the amount of tournaments have participated in",
   },
-  location: {
-    validator: () => Array.from(document.querySelectorAll('[name="location"]')).some(radio => radio.checked),
-    errorMessage: "Please choose a location",
-  },
+  // location: {
+  //   validator: () => Array.from(document.querySelectorAll('[name="location"]')).some(radio => radio.checked),
+  //   errorMessage: "Please choose a location",
+  // },
   termsConds : {
     validator: () => document.querySelector('[name="termsConds"]').checked,
     errorMessage: "Please accept the terms and conditions",
@@ -231,7 +231,7 @@ form.addEventListener("submit", e => {
         let isValidField = true;
 
         inputs.forEach(input => {
-          if (input.type === "radio" || input.type === "checkbox") {
+          if (input.type === "checkbox") {
               if (requiredCheckboxes.includes(fieldName)) {
                   isValidField = input.checked;
               } else {
@@ -244,7 +244,7 @@ form.addEventListener("submit", e => {
         })
 
         // If the field is not valid, display the error message
-        if (!isValidField && (fieldName === "location" || fieldName === "termsConds")) {
+        if (!isValidField && fieldName === "termsConds") {
             handleErrorMessage(inputs[0], fields[fieldName].errorMessage);
         }
 
